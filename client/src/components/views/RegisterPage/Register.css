@@ -1,0 +1,13 @@
+.success {
+    color:greenyellow;
+    display: none;
+}
+
+.fail {
+    color:red;
+    display:none;
+}
+
+.show {
+    display: block;
+}
