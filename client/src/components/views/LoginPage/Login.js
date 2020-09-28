@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loginUser } from '../../../_action/user_action';
+import { withRouter } from 'react-router-dom'
 
-function Login() {
+function Login({ history }) {
     const [email, setEmail] = useState('');
     const [pw, setPw] = useState('');
     const dispatch = useDispatch();
-    const data = useSelector(state => console.log(state.state))
 
     const onEmailhandler = (e) => {
         setEmail(e.target.value)
@@ -25,14 +25,13 @@ function Login() {
         dispatch(loginUser(body))
             .then(res => {
                 if (res.payload.loginSuccess) {
-                    // props.history.push('/')
+                    history.push('/')
                     console.log('로그인 성공')
                 }
                 else {
                     console.log('로그인 실패')
                 }
             })
-        console.log(data)
     }
 
     return (
@@ -51,4 +50,4 @@ function Login() {
     )
 }
 
-export default Login
+export default withRouter(Login)
