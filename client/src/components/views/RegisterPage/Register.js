@@ -56,8 +56,8 @@ function Register({ history }) {
             <form onSubmit={onSubmit}>
                 <input type="text" onChange={onName} value={name} placeholder="이름" />
                 <input type="email" onChange={onEmail} value={email} placeholder="예) test@gmail.com" />
-                <input type="password" onChange={onPassword1} value={pw1} onBlur={isMatchPassword} placeholder="비밀번호" />
-                <input type="password" onChange={onPassword2} value={pw2} onBlur={isMatchPassword} placeholder="비밀번호 확인" />
+                <input type="password" onChange={onPassword1} value={pw1} onBlur={isMatchPassword} placeholder="비밀번호 입력" />
+                <input type="password" onChange={onPassword2} value={pw2} onBlur={isMatchPassword} placeholder="비밀번호 재 입력" />
                 <span className={`fail ${check.fail ? 'show' : ''}`}>비밀번호가 틀립니다</span>
                 <span className={`success ${check.success ? 'show' : ''}`}>비밀번호가 같습니다</span>
                 <button type="submit">회원 가입</button>

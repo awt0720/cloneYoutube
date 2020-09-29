@@ -41,7 +41,7 @@ function Login({ history }) {
         }}>
             <form onSubmit={onSubmithandler} style={{ display: 'flex', flexDirection: "column" }}>
                 <input type="text" value={email} onChange={onEmailhandler} placeholder="id를 입력" />
-                <input type="password" value={pw} onChange={onPasswordhandler} placeholder="password를 입력" />
+                <input type="password" value={pw} onChange={onPasswordhandler} autoComplete="off" placeholder="password를 입력" />
                 <br />
                 <button type="submit">로그인</button>
             </form>

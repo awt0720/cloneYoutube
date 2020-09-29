@@ -8,16 +8,20 @@ import LandingPage from './components/views/LandingPage/LandingPage';
 import Login from './components/views/LoginPage/Login';
 import Register from './components/views/RegisterPage/Register';
 import VideoUpload from './components/views/VideoUpload/VideoUpload'
+import Nav from './components/views/nav/TopNav'
+import VideoDetail from './components/views/VideoDetail/VIdeoDetail'
 import Auth from './hoc/auth'
 
 function App() {
   return (
     <Router>
+      <Nav />
       <Switch>
         <Route exact path="/" component={Auth(LandingPage, null)} />
         <Route exact path="/login" component={Auth(Login, false)} />
         <Route exact path="/register" component={Auth(Register, false)} />
-        <Route exact path="/video/upload" component={Auth(VideoUpload, null)} />
+        <Route exact path="/video/upload" component={Auth(VideoUpload, true)} />
+        <Route exact path="/video/:videoId" component={Auth(VideoDetail, null)} />
       </Switch>
     </Router>
   );

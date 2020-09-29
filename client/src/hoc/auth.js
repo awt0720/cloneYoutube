@@ -10,7 +10,6 @@ export default function (SpecificComponent, option, adminRouter = null) {
 
             dispatch(auth())
                 .then(res => {
-                    console.log(res)
                     //로그인 X
                     if (!res.payload.isAuth) {
                         if (option) {
@@ -23,7 +22,7 @@ export default function (SpecificComponent, option, adminRouter = null) {
                             history.push('/')
                         }
                         else {
-                            if (!option) {
+                            if (option === false) {
                                 history.push('/')
                             }
                         }

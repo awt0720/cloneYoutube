@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
 
 const PrivateOption = [
     { value: 0, label: "Private" },
@@ -19,6 +20,11 @@ function VideoUpload() {
     const [Discription, setDiscription] = useState("")
     const [Private, setPrivate] = useState(0)
     const [Category, setCategory] = useState("Film & Animation")
+    const [FilePath, setFilePath] = useState("")
+    const [Duration, setDuration] = useState("")
+    const [ThumbnailPath, setThumbnailPath] = useState("");
+
+    const user = useSelector(state => state.userState)
 
     const onTitle = (e) => {
         setVideoTitle(e.currentTarget.value)
@@ -46,7 +52,50 @@ function VideoUpload() {
         axios.post('/api/video/uploadfiles', formData, config)
             .then(res => {
                 if (res.data.success) {
-                    console.log(res.data)
+
+                    let variable = {
+                        url: res.data.url,
+                        fileName: res.data.fileName
+                    }
+
+                    setFilePath(res.data.url)
+
+                    axios.post('/api/video/thumbnail', variable)
+                        .then(res => {
+                            if (res.data.success) {
+                                setDuration(res.data.Duration)
+                                setThumbnailPath(res.data.url)
+                            } else {
+                                console.log('썸네일 생성 실패')
+                            }
+                        })
+
+                } else {
+                    console.log('업로드 실패')
+                }
+            })
+    }
+
+    const onSumbit = (e) => {
+        e.preventDefault();
+
+        const variables = {
+            writer: user.userData._id,
+            title: VideoTitle,
+            description: Discription,
+            privacy: Private,
+            filePath: FilePath,
+            category: Category,
+            duration: Duration,
+            thumbnail: ThumbnailPath,
+        }
+
+        axios.post('/api/video/uploadVideo', variables)
+            .then(res => {
+                console.log(variables)
+                console.log(res.data)
+                if (res.data.success) {
+                    console.log('업로드 성공')
                 } else {
                     console.log('업로드 실패')
                 }
@@ -56,7 +105,7 @@ function VideoUpload() {
         <div>
             <h1> Upload Video</h1>
 
-            <form>
+            <form onSubmit={onSumbit}>
                 <Dropzone
                     onDrop={onDrop}
                     multiple={false}
@@ -67,9 +116,11 @@ function VideoUpload() {
                         </div>
                     )}
                 </Dropzone>
-                <div>
-                    <img />
-                </div>
+                {ThumbnailPath &&
+                    <div>
+                        <img src={`http://localhost:8000/${ThumbnailPath}`} alt="썸네일" />
+                    </div>
+                }
                 <br />
                 <br />
                 <label>제목</label>
@@ -91,7 +142,7 @@ function VideoUpload() {
                         return <option key={index} value={item.value}>{item.label}</option>
                     })}
                 </select>
-                <button type="submit">완료</button>
+                <button type="submit" onSubmit={onSumbit}>완료</button>
             </form>
         </div>
     )
