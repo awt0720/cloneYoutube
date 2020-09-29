@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import SideVideos from './sections/SideVideo'
-
+import Subscribe from './sections/Subscribe'
 function VideoDetail() {
     const [videoDetail, setVideoDetail] = useState([])
     let { videoId } = useParams()
     const variable = { videoId: videoId }
-
     useEffect(() => {
         axios.post('/api/video/getVideoDetail', variable)
             .then(res => {
@@ -17,7 +16,8 @@ function VideoDetail() {
                     console.log('비디오 정보 가져오기 실패')
                 }
             })
-    }, [videoDetail])
+    }, [])
+
     if (videoDetail.writer) {
         return (
             <div>
@@ -28,8 +28,8 @@ function VideoDetail() {
                     <span>{videoDetail.title}</span>
                     <span>{videoDetail.writer.name}</span>
                     <span>{videoDetail.description}</span>
-                    <span></span>
                 </div>
+                <Subscribe userTo={videoId} userFrom={localStorage.getItem('userId')} />
                 <div>
                     댓글
             </div>

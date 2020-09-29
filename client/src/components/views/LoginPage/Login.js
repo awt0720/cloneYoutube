@@ -26,6 +26,7 @@ function Login({ history }) {
             .then(res => {
                 if (res.payload.loginSuccess) {
                     history.push('/')
+                    window.localStorage.setItem('userId', res.payload.userId);
                     console.log('로그인 성공')
                 }
                 else {
