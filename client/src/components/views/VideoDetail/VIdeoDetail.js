@@ -3,8 +3,12 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import SideVideos from './sections/SideVideo'
 import Subscribe from './sections/Subscribe'
+import Comment from './sections/Comment'
+import LikeDisLikes from './sections/LikeDisLikes'
+
 function VideoDetail() {
     const [videoDetail, setVideoDetail] = useState([])
+    const [Comments, setComments] = useState([])
     let { videoId } = useParams()
     const variable = { videoId: videoId }
     useEffect(() => {
@@ -16,9 +20,23 @@ function VideoDetail() {
                     console.log('비디오 정보 가져오기 실패')
                 }
             })
+
+        axios.post('/api/video/getComment', variable)
+            .then(res => {
+                if (res.data.success) {
+                    setComments(res.data.comments)
+                } else {
+                    console.log('비디오디테일페잊에서 전체코멘드 가져오기 실패')
+                }
+            })
     }, [])
+    const refresh = (newComment) => {
+        setComments(Comments.concat(newComment))
+    }
 
     if (videoDetail.writer) {
+
+        const subscribeBtn = videoDetail.writer._id !== localStorage.getItem('userId') && <Subscribe userTo={videoDetail.writer._id} userFrom={localStorage.getItem('userId')} />
         return (
             <div>
                 <div>
@@ -29,11 +47,12 @@ function VideoDetail() {
                     <span>{videoDetail.writer.name}</span>
                     <span>{videoDetail.description}</span>
                 </div>
-                <Subscribe userTo={videoId} userFrom={localStorage.getItem('userId')} />
-                <div>
-                    댓글
-            </div>
-                <div>
+                {subscribeBtn}
+                <LikeDisLikes video videoId={videoId} userId={localStorage.getItem('userId')} />
+                <div style={{ border: '1px solid grey' }}>
+                    <Comment refresh={refresh} CommentsList={Comments} />
+                </div>
+                <div style={{ width: "50vW", height: '30vh', marginTop: '40px' }}>
                     <SideVideos />
                 </div>
             </div>

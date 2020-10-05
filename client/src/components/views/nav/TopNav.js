@@ -19,12 +19,13 @@ function TopNav({ history }) {
     if (user.userData && !user.userData.isAuth) {
         return (
             <div>
-                <div onClick={() => history.push('/register')}>
+                <a href='/register'>
                     회원가입
-            </div>
-                <div onClick={() => history.push(('/login'))}>
+            </a>
+                <br />
+                <a href='/login'>
                     로그인
-            </div>
+            </a>
             </div>
         )
     }
@@ -33,8 +34,10 @@ function TopNav({ history }) {
             <>
                 <div>
                     <a href="/video/upload">비디오 업로드</a>
-
                 </div>
+                <a href='/subscription'>
+                    구독한 페이지
+            </a>
                 <div onClick={Logout}>
                     로그아웃
             </div>

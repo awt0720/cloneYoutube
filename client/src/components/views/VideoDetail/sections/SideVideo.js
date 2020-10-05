@@ -21,7 +21,6 @@ function Sidevideo() {
         return (
             <div key={index} style={{ width: "100%", height: "40vh" }}>
                 <a href={`/video/${video._id}`}>
-                    <div>ddsfafds</div>
                     <img src={`http://localhost:8000/${video.thumbnail}`} alt='썸네일' />
                     <br />
                     <span>작성자 {video.writer.name}</span>

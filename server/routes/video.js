@@ -4,7 +4,9 @@ const { Video } = require('../models/Video');
 const { auth } = require('../midleware/auth')
 const multer = require('multer')
 const path = require('path')
-const ffmpeg = require('fluent-ffmpeg')
+const ffmpeg = require('fluent-ffmpeg');
+const { Subscriber } = require('../models/Subscriber');
+const { Comment } = require('../models/Comment');
 
 let storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -87,5 +89,34 @@ router.post('/getVideoDetail', (req, res) => {
         })
 })
 
+router.post('/getSubscriptionVideo', (req, res) => {
+    Subscriber.find({ userFrom: req.body.userFrom })
+        .exec((err, subscriberInfo) => {
+            if (err) return res.status(400).send(err)
+            let subscribeUser = []
+            subscriberInfo.map((Subscribe, index) => {
+                subscribeUser.push(Subscribe.userTo)
+            })
+
+
+
+            Video.find({ writer: { $in: subscribeUser } })
+                .populate('writer')
+                .exec((err, videos) => {
+                    if (err) return res.status(400).send(err)
+                    res.status(200).json({ success: true, videos })
+                })
+
+        })
+})
+
+router.post('/getComment', (req, res) => {
+    Comment.find({ "postId": req.body.videoId })
+        .populate('writer')
+        .exec((err, comments) => {
+            if (err) return res.status(400).send(err)
+            res.status(200).json({ success: true, comments })
+        })
+})
 
 module.exports = router;
